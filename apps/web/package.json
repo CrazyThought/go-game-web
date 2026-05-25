@@ -1,0 +1,31 @@
+{
+  "name": "@go-game/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "echo 'lint ok'",
+    "lint:fix": "echo 'lint fix ok'",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@go-game/core": "workspace:*",
+    "@go-game/storage": "workspace:*",
+    "@go-game/ui": "workspace:*",
+    "pinia": "^2.3.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.5.0",
+    "tailwindcss": "^3.4.0",
+    "vite": "npm:rolldown-vite@latest",
+    "vue-tsc": "^2.2.0"
+  }
+}
