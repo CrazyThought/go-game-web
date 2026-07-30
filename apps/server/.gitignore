@@ -1,0 +1,14 @@
+# Next.js
+.next/
+out/
+
+# 环境变量（含密钥）
+.env.local
+.env.*.local
+
+# 依赖
+node_modules/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
