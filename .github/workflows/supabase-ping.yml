@@ -1,0 +1,28 @@
+name: Supabase Activity Ping
+
+on:
+  schedule:
+    - cron: '0 0 */3 * *' # 每 3 天 UTC 00:00 执行一次
+  workflow_dispatch: # 允许在 GitHub Actions 页面手动触发
+
+jobs:
+  ping-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Project
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: |
+          # Supabase 的认证服务健康检查端点，无需数据库表、无需密钥即可返回 200
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${SUPABASE_URL}/auth/v1/health")
+
+          echo "Supabase URL: $SUPABASE_URL"
+          echo "HTTP Status: $response"
+
+          if [ "$response" -ne 200 ]; then
+            echo "Failed to ping Supabase project."
+            exit 1
+          fi
+
+          echo "Supabase project pinged successfully!"
