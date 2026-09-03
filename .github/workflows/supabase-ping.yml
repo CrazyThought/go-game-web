@@ -28,15 +28,18 @@ jobs:
             AUTH_HEADERS=(-H "apikey: ${SUPABASE_PUBLISHABLE_KEY}" -H "Authorization: Bearer ${SUPABASE_PUBLISHABLE_KEY}")
           fi
 
+          # 调用 RPC 函数 ping()，真正在数据库中执行一次查询以重置 7 天暂停倒计时
           response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST \
             "${AUTH_HEADERS[@]}" \
-            "${SUPABASE_URL}/rest/v1/")
+            -H "Content-Type: application/json" \
+            "${SUPABASE_URL}/rest/v1/rpc/ping")
 
           echo "Supabase URL: $SUPABASE_URL"
           echo "HTTP Status: $response"
 
           if [ "$response" -ne 200 ]; then
-            echo "::error::Data API 返回 $response。请检查 publishable key 是否正确（sb_publishable_ 开头、无多余空白），以及项目是否已启用 Data API（Integrations → Data API）。"
+            echo "::error::RPC ping 返回 $response。请确认已在 Supabase SQL Editor 执行 ping() 函数并 grant execute to anon。"
             exit 1
           fi
 
