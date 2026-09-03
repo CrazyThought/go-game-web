@@ -14,16 +14,29 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          # 调用 Data API 根路径并携带 publishable key，真正触达数据库以重置 7 天暂停倒计时
+          # GitHub Actions secret 与 Infisical 相互独立，需要在仓库中单独配置
+          if [ -z "$SUPABASE_PUBLISHABLE_KEY" ]; then
+            echo "::error::SUPABASE_PUBLISHABLE_KEY 未设置。请在仓库 Settings → Secrets and variables → Actions 中添加。"
+            exit 1
+          fi
+
+          # 新 publishable key（sb_publishable_...）不是 JWT，只能放 apikey header；
+          # 旧 anon key（eyJ... JWT）则需要同时携带 Authorization: Bearer
+          if [[ "$SUPABASE_PUBLISHABLE_KEY" == sb_publishable_* ]]; then
+            AUTH_HEADERS=(-H "apikey: ${SUPABASE_PUBLISHABLE_KEY}")
+          else
+            AUTH_HEADERS=(-H "apikey: ${SUPABASE_PUBLISHABLE_KEY}" -H "Authorization: Bearer ${SUPABASE_PUBLISHABLE_KEY}")
+          fi
+
           response=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "apikey: ${SUPABASE_PUBLISHABLE_KEY}" \
+            "${AUTH_HEADERS[@]}" \
             "${SUPABASE_URL}/rest/v1/")
 
           echo "Supabase URL: $SUPABASE_URL"
           echo "HTTP Status: $response"
 
           if [ "$response" -ne 200 ]; then
-            echo "Failed to ping Supabase project."
+            echo "::error::Data API 返回 $response。请检查 publishable key 是否正确（sb_publishable_ 开头、无多余空白），以及项目是否已启用 Data API（Integrations → Data API）。"
             exit 1
           fi
 
