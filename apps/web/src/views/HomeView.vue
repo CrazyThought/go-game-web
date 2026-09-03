@@ -87,7 +87,7 @@ function handleGameLoaded() {
         </div>
 
         <button
-          class="w-full py-4 px-6 rounded-xl text-lg font-semibold shadow-lg transition-all duration-200 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-md"
+          class="btn-primary btn-amber"
           @click="handleStartGame"
         >
           <span class="flex items-center justify-center gap-2">
@@ -105,7 +105,7 @@ function handleGameLoaded() {
         </button>
 
         <button
-          class="w-full py-4 px-6 rounded-xl text-lg font-semibold shadow-lg transition-all duration-200 bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-md"
+          class="btn-primary btn-blue"
           @click="handleImportGame"
         >
           <span class="flex items-center justify-center gap-2">
@@ -127,7 +127,7 @@ function handleGameLoaded() {
         </button>
 
         <button
-          class="w-full py-4 px-6 rounded-xl text-lg font-semibold shadow-lg transition-all duration-200 bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-md"
+          class="btn-primary btn-emerald"
           @click="showSavedGames = true"
         >
           <span class="flex items-center justify-center gap-2">
@@ -164,3 +164,23 @@ function handleGameLoaded() {
     <SavedGamesModal v-if="showSavedGames" @close="showSavedGames = false" />
   </div>
 </template>
+
+<style scoped>
+.btn-primary {
+  @apply w-full py-4 px-6 rounded-xl text-lg font-semibold shadow-lg
+    transition-all duration-200 text-white hover:shadow-xl
+    hover:-translate-y-0.5 active:translate-y-0 active:shadow-md;
+}
+.btn-amber {
+  @apply bg-gradient-to-r from-amber-500 to-orange-500
+    hover:from-amber-600 hover:to-orange-600;
+}
+.btn-blue {
+  @apply bg-gradient-to-r from-blue-500 to-indigo-500
+    hover:from-blue-600 hover:to-indigo-600;
+}
+.btn-emerald {
+  @apply bg-gradient-to-r from-emerald-500 to-green-600
+    hover:from-emerald-600 hover:to-green-700;
+}
+</style>

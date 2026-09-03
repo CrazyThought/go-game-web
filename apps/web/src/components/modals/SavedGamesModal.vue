@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { GameStorage } from '@go-game/storage';
+import BaseModal from '../BaseModal.vue';
 import type { SavedGame, GameState } from '@go-game/core';
 import { BOARD_SIZE_LABELS, generateSGF } from '@go-game/core';
 import { useGameStore } from '../../stores/gameStore';
@@ -101,8 +102,7 @@ function formatDate(dateStr: string) {
 </script>
 
 <template>
-  <div class="fixed inset-0 z-40 flex items-center justify-center bg-black/40" @click.self="emit('close')">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 max-h-[80vh] flex flex-col">
+  <BaseModal body-class="max-h-[80vh] flex flex-col" @close="emit('close')">
       <div class="flex items-center justify-between p-6 pb-3">
         <h2 class="text-lg font-bold text-gray-800">现有棋局</h2>
         <button
@@ -169,7 +169,6 @@ function formatDate(dateStr: string) {
           </div>
         </div>
       </div>
-    </div>
 
     <!-- Download Format Modal -->
     <div
@@ -201,5 +200,5 @@ function formatDate(dateStr: string) {
         </button>
       </div>
     </div>
-  </div>
+  </BaseModal>
 </template>

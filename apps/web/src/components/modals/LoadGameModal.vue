@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { useStorage } from '../../composables/useStorage';
+import BaseModal from '../BaseModal.vue';
 
 const props = defineProps<{
   storage: ReturnType<typeof useStorage>;
@@ -56,8 +57,7 @@ function handleJsonFileUpload(e: Event) {
 </script>
 
 <template>
-  <div class="fixed inset-0 z-40 flex items-center justify-center bg-black/40" @click.self="emit('close')">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg mx-4 p-6 max-h-[80vh] flex flex-col">
+  <BaseModal max-width="lg" body-class="p-6 max-h-[80vh] flex flex-col" @close="emit('close')">
       <h2 class="text-lg font-bold text-gray-800 mb-4">导入棋局</h2>
 
       <!-- Tabs -->
@@ -141,6 +141,5 @@ function handleJsonFileUpload(e: Event) {
           </button>
         </div>
       </div>
-    </div>
-  </div>
+  </BaseModal>
 </template>

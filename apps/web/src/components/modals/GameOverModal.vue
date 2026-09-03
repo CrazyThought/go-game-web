@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TerritoryResult, StoneColor } from '@go-game/core';
 import { DEFAULT_KOMI } from '@go-game/core';
+import BaseModal from '../BaseModal.vue';
 
 defineProps<{
   territory: TerritoryResult;
@@ -15,8 +16,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="fixed inset-0 z-40 flex items-center justify-center bg-black/40">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm mx-4 p-6 text-center">
+  <BaseModal max-width="sm" body-class="p-6 text-center" :close-on-overlay="false">
       <div class="text-3xl mb-2">
         {{ winner === 'black' ? '⚫' : winner === 'white' ? '⚪' : '🤝' }}
       </div>
@@ -76,6 +76,5 @@ const emit = defineEmits<{
       >
         关闭
       </button>
-    </div>
-  </div>
+  </BaseModal>
 </template>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import BaseModal from '../BaseModal.vue';
+
 const emit = defineEmits<{
   close: [];
   confirm: [];
@@ -6,8 +8,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="fixed inset-0 z-40 flex items-center justify-center bg-black/40" @click.self="emit('close')">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm mx-4 p-6 text-center">
+  <BaseModal max-width="sm" body-class="p-6 text-center" @close="emit('close')">
       <h2 class="text-lg font-bold text-red-600 mb-2">退出对局</h2>
       <p class="text-sm text-gray-500 mb-6">当局游戏进度若无保存则清空，是否退出？</p>
 
@@ -25,6 +26,5 @@ const emit = defineEmits<{
           确认退出
         </button>
       </div>
-    </div>
-  </div>
+  </BaseModal>
 </template>

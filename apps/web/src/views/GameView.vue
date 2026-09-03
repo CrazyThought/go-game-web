@@ -168,7 +168,7 @@ function handleExitConfirm() {
 
             <button
               v-if="gameStore.gameState.isSimulationMode && simMoves.length > 0"
-              class="absolute -top-1 -right-1 w-8 h-8 bg-purple-500 text-white rounded-full shadow-lg hover:bg-purple-600 transition-colors flex items-center justify-center text-sm font-bold z-40"
+              class="icon-btn-round"
               title="模拟历史"
               @click="uiStore.showSimHistory = !uiStore.showSimHistory"
             >
@@ -216,13 +216,13 @@ function handleExitConfirm() {
             <h3 class="font-bold text-gray-800">标记死棋</h3>
             <p class="text-xs text-gray-500">点击棋盘上的棋子标记为死棋</p>
             <button
-              class="w-full px-4 py-2 bg-accent-red text-white rounded-md hover:opacity-90 transition-opacity text-sm font-medium"
+              class="btn-danger"
               @click="confirmDeadStones"
             >
               确认标记，计算终局目数
             </button>
             <button
-              class="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm"
+              class="btn-secondary"
               @click="
                 uiStore.showDeadStoneMarker = false;
                 deadStones = [];
@@ -257,7 +257,7 @@ function handleExitConfirm() {
       <div
         v-for="toast in uiStore.toasts"
         :key="toast.id"
-        class="px-4 py-2 rounded-lg shadow-lg text-sm font-medium cursor-pointer transition-all"
+        class="toast"
         :class="{
           'bg-green-500 text-white': toast.type === 'success',
           'bg-red-500 text-white': toast.type === 'error',
@@ -310,3 +310,23 @@ function handleExitConfirm() {
     />
   </div>
 </template>
+
+<style scoped>
+.icon-btn-round {
+  @apply absolute -top-1 -right-1 w-8 h-8 bg-purple-500 text-white rounded-full
+    shadow-lg hover:bg-purple-600 transition-colors flex items-center
+    justify-center text-sm font-bold z-40;
+}
+.btn-danger {
+  @apply w-full px-4 py-2 bg-accent-red text-white rounded-md
+    hover:opacity-90 transition-opacity text-sm font-medium;
+}
+.btn-secondary {
+  @apply w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-md
+    hover:bg-gray-300 transition-colors text-sm;
+}
+.toast {
+  @apply px-4 py-2 rounded-lg shadow-lg text-sm font-medium
+    cursor-pointer transition-all;
+}
+</style>

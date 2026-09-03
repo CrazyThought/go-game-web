@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import BaseModal from '../BaseModal.vue';
+
 defineEmits<{
   confirm: [];
   cancel: [];
@@ -6,8 +8,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="fixed inset-0 z-40 flex items-center justify-center bg-black/40" @click.self="$emit('cancel')">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm mx-4 p-6 text-center">
+  <BaseModal max-width="sm" body-class="p-6 text-center" @close="$emit('cancel')">
       <h2 class="text-lg font-bold text-gray-800 mb-2">确认新局</h2>
       <p class="text-sm text-gray-500 mb-6">当前对局将丢失，是否继续？</p>
 
@@ -25,6 +26,5 @@ defineEmits<{
           确认
         </button>
       </div>
-    </div>
-  </div>
+  </BaseModal>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import BaseModal from '../BaseModal.vue';
 
 const emit = defineEmits<{
   close: [];
@@ -16,8 +17,7 @@ function handleSave() {
 </script>
 
 <template>
-  <div class="fixed inset-0 z-40 flex items-center justify-center bg-black/40" @click.self="emit('close')">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 p-6">
+  <BaseModal @close="emit('close')">
       <h2 class="text-lg font-bold text-gray-800 mb-4">保存棋局</h2>
 
       <div class="space-y-3">
@@ -58,6 +58,5 @@ function handleSave() {
           保存
         </button>
       </div>
-    </div>
-  </div>
+  </BaseModal>
 </template>
