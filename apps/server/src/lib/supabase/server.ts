@@ -3,23 +3,23 @@ import { cookies } from 'next/headers';
 import { getSecret } from '@/lib/infisical';
 
 let _url: string | null = null;
-let _anonKey: string | null = null;
+let _publishableKey: string | null = null;
 
 async function getSupabaseConfig() {
-  if (!_url || !_anonKey) {
-    [_url, _anonKey] = await Promise.all([
+  if (!_url || !_publishableKey) {
+    [_url, _publishableKey] = await Promise.all([
       getSecret('SUPABASE_URL'),
-      getSecret('SUPABASE_ANON_KEY'),
+      getSecret('SUPABASE_PUBLISHABLE_KEY'),
     ]);
   }
-  return { url: _url, anonKey: _anonKey };
+  return { url: _url, publishableKey: _publishableKey };
 }
 
 export async function createClient() {
   const cookieStore = await cookies();
-  const { url, anonKey } = await getSupabaseConfig();
+  const { url, publishableKey } = await getSupabaseConfig();
 
-  return createServerClient(url, anonKey, {
+  return createServerClient(url, publishableKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();

@@ -12,10 +12,12 @@ jobs:
       - name: Ping Supabase Project
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          # Supabase 的认证服务健康检查端点，无需数据库表、无需密钥即可返回 200
+          # 调用 Data API 根路径并携带 publishable key，真正触达数据库以重置 7 天暂停倒计时
           response=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${SUPABASE_URL}/auth/v1/health")
+            -H "apikey: ${SUPABASE_PUBLISHABLE_KEY}" \
+            "${SUPABASE_URL}/rest/v1/")
 
           echo "Supabase URL: $SUPABASE_URL"
           echo "HTTP Status: $response"
