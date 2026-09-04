@@ -11,25 +11,35 @@
     "lint": "pnpm -r lint",
     "lint:fix": "pnpm -r lint:fix",
     "format": "prettier --write .",
+    "prepare": "husky",
     "test": "pnpm -r test",
     "test:watch": "pnpm -r test:watch",
     "test:coverage": "pnpm -r test:coverage",
     "clean": "pnpm -r clean"
   },
   "devDependencies": {
+    "@eslint/js": "^9",
+    "eslint": "^9",
+    "eslint-config-prettier": "^10",
+    "eslint-plugin-vue": "^10",
+    "globals": "^16",
+    "husky": "^9",
+    "lint-staged": "^16",
     "prettier": "^3.5.0",
+    "typescript-eslint": "^8",
     "typescript": "^5.8.0"
   },
   "engines": {
     "node": ">=20.19.0",
     "pnpm": ">=9.0.0"
   },
-  "pnpm": {
-    "overrides": {
-      "vite": "npm:rolldown-vite@latest"
-    },
-    "onlyBuiltDependencies": [
-      "vue-demi"
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts,tsx,vue}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,css,html,yml,yaml}": [
+      "prettier --write"
     ]
   }
 }

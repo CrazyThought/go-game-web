@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
-import type { Position } from '@go-game/core';
-import { BoardSize, getStarPoints, StoneColor } from '@go-game/core';
+import type { Position, BoardSize } from '@go-game/core';
+import { getStarPoints, StoneColor } from '@go-game/core';
 
 const props = withDefaults(
   defineProps<{
@@ -20,6 +20,7 @@ const props = withDefaults(
     deadStones: () => [],
     disabled: false,
     markMode: false,
+    currentPlayer: StoneColor.Black,
   },
 );
 
@@ -64,7 +65,6 @@ function worldToBoard(clientX: number, clientY: number): Position | null {
   if (!canvas) return null;
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
-  const size = boardPixelSize.value;
 
   const scaleX = canvas.width / dpr / rect.width;
   const scaleY = canvas.height / dpr / rect.height;

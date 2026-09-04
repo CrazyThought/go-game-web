@@ -1,7 +1,6 @@
 import type { Move, Position } from './types';
 import { StoneColor } from './types';
-import { createEmptyBoard, opponentColor } from './board';
-import { calculateTerritory } from './territory';
+import { createEmptyBoard } from './board';
 
 const SGF_COLUMNS = 'abcdefghijklmnopqrs';
 
@@ -18,11 +17,7 @@ function sgfToPos(sgf: string): Position | null {
   return { x, y };
 }
 
-export function generateSGF(
-  boardSize: number,
-  moves: Move[],
-  komi: number = 6.5,
-): string {
+export function generateSGF(boardSize: number, moves: Move[], komi: number = 6.5): string {
   const lines: string[] = [];
   lines.push('(;');
   lines.push(`GM[1]`);
@@ -81,8 +76,8 @@ export function replayMoves(
   moves: Move[],
 ): { board: StoneColor[][]; capturedBlack: number; capturedWhite: number } {
   const board = createEmptyBoard(boardSize);
-  let capturedBlack = 0;
-  let capturedWhite = 0;
+  const capturedBlack = 0;
+  const capturedWhite = 0;
 
   for (const move of moves) {
     if (move.position) {

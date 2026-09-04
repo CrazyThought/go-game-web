@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { GameStorage } from '@go-game/storage';
 import { BoardSizeSelector } from '@go-game/ui';
 import type { BoardSize } from '@go-game/core';
 import { useGameStore } from '../stores/gameStore';
@@ -86,10 +85,7 @@ function handleGameLoaded() {
           />
         </div>
 
-        <button
-          class="btn-primary btn-amber"
-          @click="handleStartGame"
-        >
+        <button class="btn-primary btn-amber" @click="handleStartGame">
           <span class="flex items-center justify-center gap-2">
             <svg
               class="w-5 h-5"
@@ -104,10 +100,7 @@ function handleGameLoaded() {
           </span>
         </button>
 
-        <button
-          class="btn-primary btn-blue"
-          @click="handleImportGame"
-        >
+        <button class="btn-primary btn-blue" @click="handleImportGame">
           <span class="flex items-center justify-center gap-2">
             <svg
               class="w-5 h-5"
@@ -126,10 +119,7 @@ function handleGameLoaded() {
           </span>
         </button>
 
-        <button
-          class="btn-primary btn-emerald"
-          @click="showSavedGames = true"
-        >
+        <button class="btn-primary btn-emerald" @click="showSavedGames = true">
           <span class="flex items-center justify-center gap-2">
             <svg
               class="w-5 h-5"

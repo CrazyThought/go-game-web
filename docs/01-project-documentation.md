@@ -5,6 +5,7 @@
 网页围棋（Go Game Monorepo）是一个基于 **Vue 3 + Next.js 14 (BFF) + TypeScript + Supabase** 的全栈围棋应用，采用 **pnpm Workspace Monorepo** 架构。项目实现完整围棋规则（落子、提子、打劫、中国数子法），支持本地 IndexedDB 持久化、棋局导入导出（JSON/SGF）、模拟复盘、Supabase 在线联机对战等功能。
 
 **三层架构**：
+
 ```
 Vue 3 前端 (apps/web)  →  Next.js BFF (apps/server)  →  Supabase (PostgreSQL + Auth + Realtime)
      Vite dev server            Next.js API Routes              with RLS policies
@@ -15,22 +16,22 @@ Vue 3 前端 (apps/web)  →  Next.js BFF (apps/server)  →  Supabase (PostgreS
 
 ## 2. 技术栈
 
-| 技术 | 版本 | 用途 |
-|------|------|------|
-| Vue 3 | ^3.5 | 前端框架（Composition API + SFC） |
-| Vite (Rolldown) | ^7.0 | 前端构建工具（Rolldown 引擎） |
-| Next.js | ^14.2 | BFF 服务端（API Routes + Supabase SSR） |
-| React | ^18.3 | Next.js 运行依赖（服务器端渲染辅助） |
-| TypeScript | ^5.8 | 类型安全 |
-| Pinia | ^2.3 | 前端状态管理 |
-| Tailwind CSS | ^3.4 | 原子化 CSS |
-| LocalForage | ^1.10 | IndexedDB 封装（本地持久化） |
-| Supabase | — | 后端即服务（PostgreSQL + Auth + Realtime） |
-| @supabase/ssr | ^0.5 | Supabase SSR 客户端（服务端 cookie 读写） |
-| @supabase/supabase-js | ^2.49 | Supabase JS 客户端 |
-| Infisical SDK | ^2.0 | 密钥管理（SUPABASE_URL / ANON_KEY / SERVICE_ROLE_KEY 动态注入） |
-| Vue Router | ^4.5 | SPA 前端路由 |
-| pnpm | ^9.0 | Workspace Monorepo 包管理 |
+| 技术                  | 版本  | 用途                                                            |
+| --------------------- | ----- | --------------------------------------------------------------- |
+| Vue 3                 | ^3.5  | 前端框架（Composition API + SFC）                               |
+| Vite (Rolldown)       | ^7.0  | 前端构建工具（Rolldown 引擎）                                   |
+| Next.js               | ^14.2 | BFF 服务端（API Routes + Supabase SSR）                         |
+| React                 | ^18.3 | Next.js 运行依赖（服务器端渲染辅助）                            |
+| TypeScript            | ^5.8  | 类型安全                                                        |
+| Pinia                 | ^2.3  | 前端状态管理                                                    |
+| Tailwind CSS          | ^3.4  | 原子化 CSS                                                      |
+| LocalForage           | ^1.10 | IndexedDB 封装（本地持久化）                                    |
+| Supabase              | —     | 后端即服务（PostgreSQL + Auth + Realtime）                      |
+| @supabase/ssr         | ^0.5  | Supabase SSR 客户端（服务端 cookie 读写）                       |
+| @supabase/supabase-js | ^2.49 | Supabase JS 客户端                                              |
+| Infisical SDK         | ^2.0  | 密钥管理（SUPABASE_URL / ANON_KEY / SERVICE_ROLE_KEY 动态注入） |
+| Vue Router            | ^4.5  | SPA 前端路由                                                    |
+| pnpm                  | ^9.0  | Workspace Monorepo 包管理                                       |
 
 ## 3. Monorepo 目录结构
 
@@ -126,12 +127,12 @@ go-game-monorepo/
 
 **GoGame 类** 是整个应用的逻辑核心，采用状态机模式管理一局围棋的完整生命周期：
 
-| 阶段 | 动作 | 说明 |
-|------|------|------|
-| `placeStone(x, y)` | 位置校验 → 克隆棋盘 → 落子 → 检测对方提子 → 自杀检测 → ko 检测 | 返回 `PlaceResult { success, error? }` |
-| `pass()` | 记录停手 → consecutivePasses++ → 切换玩家 | 双停手触发死棋标记流程（由 useGame 检测） |
-| `resign()` | 立即结束 → winner = 对手 | 模拟模式中不可用 |
-| `undoMove()` | 弹出最后一步 → 恢复棋盘/提子/ko → 重算领土 | 模拟/正常模式各自维护 |
+| 阶段               | 动作                                                           | 说明                                      |
+| ------------------ | -------------------------------------------------------------- | ----------------------------------------- |
+| `placeStone(x, y)` | 位置校验 → 克隆棋盘 → 落子 → 检测对方提子 → 自杀检测 → ko 检测 | 返回 `PlaceResult { success, error? }`    |
+| `pass()`           | 记录停手 → consecutivePasses++ → 切换玩家                      | 双停手触发死棋标记流程（由 useGame 检测） |
+| `resign()`         | 立即结束 → winner = 对手                                       | 模拟模式中不可用                          |
+| `undoMove()`       | 弹出最后一步 → 恢复棋盘/提子/ko → 重算领土                     | 模拟/正常模式各自维护                     |
 
 **内部数据结构 (GameState)**：
 
@@ -150,12 +151,14 @@ territory: TerritoryResult   # 实时目数统计
 ```
 
 **模拟模式机制**：
+
 - `startSimulation()`：深拷贝当前 GameState → 进入模拟模式
 - 模拟中落子写入 `simulationMoves[]` 而非 `moveHistory[]`
 - `applySimulation()`：将 simulationMoves 合并到 moveHistory
 - `endSimulation()`：丢弃所有模拟步数，恢复 preSimulationState
 
 **棋盘算法（board.ts）**：
+
 - `getGroup(board, pos)` — BFS 广度优先搜索找连通棋子组
 - `countLiberties(board, group)` — 计算气数
 - `removeGroup(board, group)` — 提子（将棋组所有位置设为 Empty）
@@ -163,11 +166,13 @@ territory: TerritoryResult   # 实时目数统计
 - `opponentColor(color)` — 翻转颜色
 
 **数子法（territory.ts）**：
+
 - `calculateTerritory(board, capturedBlack, capturedWhite, deadStones?)` — 中国数子法填空算法
 - 遍历所有空格 BFS 找区域 → 检测区域边界颜色 → 全黑/全白边境 → 归属对应颜色
 - 总目数 = 领地 + 提子数（黑: blackTerritory + capturedWhite, 白: whiteTerritory + capturedBlack）
 
 **SGF 支持（sgf.ts）**：
+
 - `generateSGF(boardSize, moves, komi=6.5)` — 生成标准 SGF 文本（GM/SZ/KM/AP 元数据 + B[]/W[] 步序列）
 - `parseSGF(sgf)` — 解析 SGF 为 `{ boardSize, moves, komi }`
 - `replayMoves(boardSize, moves)` — 回放步序列重建棋盘
@@ -183,40 +188,43 @@ territory: TerritoryResult   # 实时目数统计
 
 **Supabase 客户端三种模式**：
 
-| 客户端 | 路径 | 用途 | 密钥来源 |
-|--------|------|------|----------|
-| `server.ts→createClient()` | [lib/supabase/server.ts](file:///d:/Programmes/go_game/go-game-monorepo/apps/server/src/lib/supabase/server.ts) | API Route 中服务端操作（含 cookie 读写） | Infisical `SUPABASE_URL` + `SUPABASE_ANON_KEY` |
-| `admin.ts→createAdminClient()` | [lib/supabase/admin.ts](file:///d:/Programmes/go_game/go-game-monorepo/apps/server/src/lib/supabase/admin.ts) | 绕过 RLS 的特权操作 | Infisical `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` |
-| `client.ts→createClient()` | [lib/supabase/client.ts](file:///d:/Programmes/go_game/go-game-monorepo/apps/server/src/lib/supabase/client.ts) | 客户端组件使用 | `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
+| 客户端                         | 路径                                                                | 用途                                     | 密钥来源                                                     |
+| ------------------------------ | ------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------ |
+| `server.ts→createClient()`     | [lib/supabase/server.ts](../apps/server/src/lib/supabase/server.ts) | API Route 中服务端操作（含 cookie 读写） | Infisical `SUPABASE_URL` + `SUPABASE_ANON_KEY`               |
+| `admin.ts→createAdminClient()` | [lib/supabase/admin.ts](../apps/server/src/lib/supabase/admin.ts)   | 绕过 RLS 的特权操作                      | Infisical `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`       |
+| `client.ts→createClient()`     | [lib/supabase/client.ts](../apps/server/src/lib/supabase/client.ts) | 客户端组件使用                           | `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
 
-**Infisical 密钥管理**（[lib/infisical/index.ts](file:///d:/Programmes/go_game/go-game-monorepo/apps/server/src/lib/infisical/index.ts)）：
+**Infisical 密钥管理**（[lib/infisical/index.ts](../apps/server/src/lib/infisical/index.ts)）：
+
 - 初始化需要 `INFISICAL_TOKEN` + `INFISICAL_PROJECT_ID` 环境变量
 - `getSecret(secretName)` 从 Infisical 获取对应环境的密钥（dev/prod）
 - 内置 Map 内存缓存，TTL 60 秒，避免每次请求都调用 Infisical API
 - 环境变量仅在 server 侧（`INFISICAL_*`），不暴露给浏览器
 
-**CORS 配置**（[next.config.mjs](file:///d:/Programmes/go_game/go-game-monorepo/apps/server/next.config.mjs)）：
+**CORS 配置**（[next.config.mjs](../apps/server/next.config.mjs)）：
+
 - 允许 `http://localhost:3000`（Vite 前端）跨域调用
 - 允许 `Authorization` 和 `Content-Type` header
 - 支持 Credentials 传递（cookie 认证）
 
 **API Routes 结构**（当前全部返回 501 "Not implemented yet"）：
 
-| 方法 | 路径 | 说明 | 状态 |
-|------|------|------|------|
-| POST | `/api/auth/register` | 用户注册 | 🚧 501 |
-| POST | `/api/auth/login` | 用户登录 | 🚧 501 |
-| POST | `/api/auth/logout` | 用户登出 | 🚧 501 |
-| GET | `/api/auth/me` | 获取当前用户 | 🚧 501 |
-| GET | `/api/rooms` | 房间列表 | 🚧 501 |
-| POST | `/api/rooms` | 创建房间 | 🚧 501 |
-| GET | `/api/rooms/[id]` | 房间详情 | 🚧 501 |
-| POST | `/api/rooms/[id]/join` | 加入房间 | 🚧 501 |
-| POST | `/api/rooms/[id]/leave` | 离开房间 | 🚧 501 |
-| POST | `/api/rooms/[id]/moves` | 落子 | 🚧 501 |
-| POST | `/api/ai/move` | AI 落子 | 🚧 501 |
+| 方法 | 路径                    | 说明         | 状态   |
+| ---- | ----------------------- | ------------ | ------ |
+| POST | `/api/auth/register`    | 用户注册     | 🚧 501 |
+| POST | `/api/auth/login`       | 用户登录     | 🚧 501 |
+| POST | `/api/auth/logout`      | 用户登出     | 🚧 501 |
+| GET  | `/api/auth/me`          | 获取当前用户 | 🚧 501 |
+| GET  | `/api/rooms`            | 房间列表     | 🚧 501 |
+| POST | `/api/rooms`            | 创建房间     | 🚧 501 |
+| GET  | `/api/rooms/[id]`       | 房间详情     | 🚧 501 |
+| POST | `/api/rooms/[id]/join`  | 加入房间     | 🚧 501 |
+| POST | `/api/rooms/[id]/leave` | 离开房间     | 🚧 501 |
+| POST | `/api/rooms/[id]/moves` | 落子         | 🚧 501 |
+| POST | `/api/ai/move`          | AI 落子      | 🚧 501 |
 
 **联机对战数据流（通过 BFF）**：
+
 ```
 [Vue 前端]  fetch('/api/auth/login', { email, password })
     ↓
@@ -236,6 +244,7 @@ territory: TerritoryResult   # 实时目数统计
 ### 4.3 状态管理层（apps/web/src/stores/）
 
 **gameStore**（封装单个 GoGame 实例）：
+
 ```typescript
 defineStore('game', () => {
   const goGame = ref(new GoGame(BoardSize.Large));
@@ -248,23 +257,24 @@ defineStore('game', () => {
 ```
 
 **uiStore**（所有 UI 状态标志）：
+
 ```typescript
 defineStore('ui', () => {
   // 弹窗标志
-  const showSaveModal = ref(false);       // 保存棋局弹窗
-  const showLoadModal = ref(false);       // 导入棋局弹窗
-  const showGameOverModal = ref(false);   // 对局结束弹窗
+  const showSaveModal = ref(false); // 保存棋局弹窗
+  const showLoadModal = ref(false); // 导入棋局弹窗
+  const showGameOverModal = ref(false); // 对局结束弹窗
   const showDeadStoneMarker = ref(false); // 死棋标记模式
-  const showSimHistory = ref(false);      // 模拟历史浮层
-  const showNewGameConfirm = ref(false);  // 新局确认弹窗
-  const showExitConfirm = ref(false);     // 退出确认弹窗
+  const showSimHistory = ref(false); // 模拟历史浮层
+  const showNewGameConfirm = ref(false); // 新局确认弹窗
+  const showExitConfirm = ref(false); // 退出确认弹窗
   // 棋盘设置
-  const selectedBoardSize = ref(BoardSize.Large);  // 当前选中大小
+  const selectedBoardSize = ref(BoardSize.Large); // 当前选中大小
   const pendingBoardSize = ref<BoardSize | null>(null); // 待确认大小
   // Toast 通知
-  const toasts = ref<Toast[]>([]);       // 3 秒自动消失
-  function toast(message, type);         // 显示通知
-  function dismissToast(id);             // 手动关闭通知
+  const toasts = ref<Toast[]>([]); // 3 秒自动消失
+  function toast(message, type); // 显示通知
+  function dismissToast(id); // 手动关闭通知
 });
 ```
 
@@ -309,13 +319,14 @@ defineStore('ui', () => {
 
 ### 4.5 视图层
 
-**路由**（[router/index.ts](file:///d:/Programmes/go_game/go-game-monorepo/apps/web/src/router/index.ts)）：
+**路由**（[router/index.ts](../apps/web/src/router/index.ts)）：
 | 路径 | 组件 | 说明 |
 |------|------|------|
-| `/` | [HomeView](file:///d:/Programmes/go_game/go-game-monorepo/apps/web/src/views/HomeView.vue) | 初始页面 |
-| `/game` | [GameView](file:///d:/Programmes/go_game/go-game-monorepo/apps/web/src/views/GameView.vue) | 游戏主页面 |
+| `/` | [HomeView](../apps/web/src/views/HomeView.vue) | 初始页面 |
+| `/game` | [GameView](../apps/web/src/views/GameView.vue) | 游戏主页面 |
 
 **HomeView**（初始页面）：
+
 - 围棋主题视觉（渐变背景 + 棋盘图案）
 - **棋盘大小选择器**（BoardSizeSelector）：设置在 `uiStore.selectedBoardSize`
 - 三个入口按钮：
@@ -325,6 +336,7 @@ defineStore('ui', () => {
 - LoadGameModal 成功导入后通过 `@loaded` emit 导航到 `/game`
 
 **GameView**（游戏主页面）：
+
 - **Top Bar**：← 返回首页 + BoardSizeSelector + 游戏状态标签（进行中/模拟中/已结束）
 - **GoBoard**：Canvas 2D 棋盘，支持落子、悬停预览（径向渐变 + 玩家颜色区分）、最后落子标记、模拟步数标签、死棋标记
 - **GameInfo**：当前玩家、目数统计、提子数、领地、步数
@@ -338,6 +350,7 @@ defineStore('ui', () => {
 #### 4.6.1 本地持久化（packages/storage）
 
 **GameStorage** 单例（LocalForage）：
+
 ```
 store name: GoGameDB / savedGames
 索引: id (UUID v4)
@@ -347,16 +360,17 @@ CRUD: saveGame / getGameById / getAllSavedGames / deleteGame / deleteGames / cle
 ```
 
 **SavedGame 结构**：
+
 ```typescript
 interface SavedGame {
-  id: string;            // crypto.randomUUID()
-  name: string;          // 棋局名称
-  note: string;          // 备注
-  boardSize: BoardSize;  // 9/13/19
-  gameData: string;      // GoGame.serialize() JSON 字符串
-  totalMoves: number;    // moveHistory 长度
-  createdAt: string;     // ISO 8601
-  updatedAt: string;     // ISO 8601
+  id: string; // crypto.randomUUID()
+  name: string; // 棋局名称
+  note: string; // 备注
+  boardSize: BoardSize; // 9/13/19
+  gameData: string; // GoGame.serialize() JSON 字符串
+  totalMoves: number; // moveHistory 长度
+  createdAt: string; // ISO 8601
+  updatedAt: string; // ISO 8601
 }
 ```
 
@@ -366,25 +380,26 @@ interface SavedGame {
 
 **数据库表结构**：
 
-| 序号 | 表名 | 说明 | 关键字段 |
-|------|------|------|----------|
-| 1 | `profiles` | 用户扩展信息 | `id → auth.users`, `username`, `avatar_url`, `rating(1200)` |
-| 2 | `rooms` | 对局房间 | `host_id`, `guest_id`, `board_size`, `status` |
-| 3 | `moves` | 落子记录 | `room_id`, `player_id`, `color`, `x/y`, `step`, `is_pass` |
-| 4 | `games` | 已结束对局 | `black_id`, `white_id`, `winner_id`, `result`, `sgf_data`, `komi` |
-| 5 | `ai_games` | AI 对局 | `user_id`, `difficulty(1-4)`, `user_color`, `sgf_data` |
+| 序号 | 表名       | 说明         | 关键字段                                                          |
+| ---- | ---------- | ------------ | ----------------------------------------------------------------- |
+| 1    | `profiles` | 用户扩展信息 | `id → auth.users`, `username`, `avatar_url`, `rating(1200)`       |
+| 2    | `rooms`    | 对局房间     | `host_id`, `guest_id`, `board_size`, `status`                     |
+| 3    | `moves`    | 落子记录     | `room_id`, `player_id`, `color`, `x/y`, `step`, `is_pass`         |
+| 4    | `games`    | 已结束对局   | `black_id`, `white_id`, `winner_id`, `result`, `sgf_data`, `komi` |
+| 5    | `ai_games` | AI 对局      | `user_id`, `difficulty(1-4)`, `user_color`, `sgf_data`            |
 
 **RLS 策略规则**：
 
-| 表 | SELECT | INSERT | UPDATE | DELETE |
-|----|--------|--------|--------|--------|
-| `profiles` | 所有人 | — | 仅自己 | — |
-| `rooms` | waiting 公开 / 参与者可见 | 登录用户 | host/guest | 仅 host |
-| `moves` | 对局参与者 | 参与者（落子人） | 禁止 | 禁止 |
-| `games` | 黑/白方 | 参与者 | 禁止 | 禁止 |
-| `ai_games` | 仅自己 | 登录用户 | 仅自己 | 仅自己 |
+| 表         | SELECT                    | INSERT           | UPDATE     | DELETE  |
+| ---------- | ------------------------- | ---------------- | ---------- | ------- |
+| `profiles` | 所有人                    | —                | 仅自己     | —       |
+| `rooms`    | waiting 公开 / 参与者可见 | 登录用户         | host/guest | 仅 host |
+| `moves`    | 对局参与者                | 参与者（落子人） | 禁止       | 禁止    |
+| `games`    | 黑/白方                   | 参与者           | 禁止       | 禁止    |
+| `ai_games` | 仅自己                    | 登录用户         | 仅自己     | 仅自己  |
 
 **额外配置**：
+
 - **自动触发器**：新用户注册 → 自动创建 `profiles` 记录；`updated_at` 自动维护
 - **Realtime**：`moves` 表已加入 `supabase_realtime` 发布，BFF 可通过 Supabase 客户端订阅落子事件
 - **工具函数**：`is_room_participant(room_id, user_id)` — 供 BFF 服务端判断房间归属
@@ -414,11 +429,13 @@ GameView.vue
 ## 6. 数据流
 
 ### 6.1 本地对局
+
 ```
 用户交互 → UI 组件 emit → composable 处理 → Pinia store 操作 → GoGame 引擎计算 → computed 响应 → UI 更新
 ```
 
 ### 6.2 联机对局（通过 BFF）
+
 ```
 用户交互 → Vue 组件 fetch() → BFF API Route → createServerClient() → Supabase
     ↓ (Supabase Realtime)
@@ -508,9 +525,9 @@ Vite 通过 `resolve.alias` 直接引用各包源码目录，开发时无需预�
 
 ## 10. 端口配置
 
-| 服务 | 端口 | 说明 |
-|------|------|------|
-| Vue 3 前端 (Vite) | 3000 | 开发服务器，HMR 热更新 |
-| Next.js BFF | 3000 | API Routes，CORS 允许 localhost:3000 |
+| 服务              | 端口 | 说明                                 |
+| ----------------- | ---- | ------------------------------------ |
+| Vue 3 前端 (Vite) | 3000 | 开发服务器，HMR 热更新               |
+| Next.js BFF       | 3000 | API Routes，CORS 允许 localhost:3000 |
 
 > **注意**：当前前端和 BFF 都配置为 3000 端口，同时启动时会产生端口冲突。实际开发中应将其一改为不同端口（如 BFF 改为 3001），并同步更新 CORS 配置。

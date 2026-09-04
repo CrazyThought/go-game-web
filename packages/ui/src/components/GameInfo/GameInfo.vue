@@ -9,10 +9,6 @@ defineProps<{
   isSimulationMode: boolean;
   winner: StoneColor | null;
 }>();
-
-function formatTerritoryText(total: number, isBlack: boolean): string {
-  return `${isBlack ? '黑方' : '白方'}: ${total.toFixed(1)} 目`;
-}
 </script>
 
 <template>
@@ -23,7 +19,9 @@ function formatTerritoryText(total: number, isBlack: boolean): string {
       <span class="text-sm text-gray-600">当前玩家:</span>
       <span
         class="inline-block w-4 h-4 rounded-full"
-        :class="currentPlayer === 'black' ? 'bg-stone-black' : 'bg-stone-white border border-gray-300'"
+        :class="
+          currentPlayer === 'black' ? 'bg-stone-black' : 'bg-stone-white border border-gray-300'
+        "
       />
       <span class="font-medium">{{ currentPlayer === 'black' ? '黑方' : '白方' }}</span>
     </div>
@@ -78,7 +76,10 @@ function formatTerritoryText(total: number, isBlack: boolean): string {
       </span>
 
       <div v-if="isGameOver && winner" class="mt-2 text-center">
-        <span class="text-lg font-bold" :class="winner === 'black' ? 'text-stone-black' : 'text-gray-500'">
+        <span
+          class="text-lg font-bold"
+          :class="winner === 'black' ? 'text-stone-black' : 'text-gray-500'"
+        >
           {{ winner === 'black' ? '黑方胜!' : '白方胜!' }}
         </span>
       </div>

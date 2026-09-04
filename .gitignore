@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 .pnpm-store/
+.pnpm-cache/
 ../.pnpm-store/
 
 # Build outputs
@@ -29,7 +30,6 @@ lerna-debug.log*
 *.sln
 *.sw?
 .trae/*
-docs/*
 
 # Temporary files
 *.tmp

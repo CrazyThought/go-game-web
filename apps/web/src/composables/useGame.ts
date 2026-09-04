@@ -1,6 +1,6 @@
 import { useGameStore } from '../stores/gameStore';
 import { useUIStore } from '../stores/uiStore';
-import type { BoardSize, Position } from '@go-game/core';
+import type { BoardSize } from '@go-game/core';
 
 export function useGame() {
   const gameStore = useGameStore();

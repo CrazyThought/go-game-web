@@ -1,5 +1,5 @@
-import { StoneColor, BoardSize } from './types';
-import type { Position } from './types';
+import { StoneColor } from './types';
+import type { Position, BoardSize } from './types';
 
 export function createEmptyBoard(size: number): StoneColor[][] {
   return Array.from({ length: size }, () => Array.from({ length: size }, () => StoneColor.Empty));

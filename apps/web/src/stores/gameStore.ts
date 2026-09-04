@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { GoGame, BoardSize, StoneColor } from '@go-game/core';
+import { GoGame, BoardSize } from '@go-game/core';
 import type { GameState, PlaceResult } from '@go-game/core';
 
 export const useGameStore = defineStore('game', () => {
